@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Share Stuff - Register</title>
+	</head>
+	
+	<body>		
+		{% if registered %}
+		<br>
+		<br>
+		<strong>Thank you for registering!</strong>
+		<a href="/sharing/">Return to the homepage.</a>
+		<br>
+		{% else %}
+		<br>
+		<h1>Register with Share Stuff</h1>
+		<form id="member_form" method="post" action="/sharing/register/"
+				enctype="multipart/form-data" >
+
+			{% csrf_token %}
+
+            {{ member_form.as_p }}	
+            {{ profile_form.as_p }}
+          
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Register"/>
+		</form>
+		{% endif %}
+	</body>
+</html>

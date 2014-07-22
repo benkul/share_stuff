@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Share Stuff - Add Item</title>
+	</head>
+	
+	<body>
+		<br>
+		<a href="/sharing/">Home Page</a>
+		<br>
+		{% if item_added %}
+		<strong>Item added successfully. <br>
+			Would you like to add another?</strong>
+			<br>
+		<a href="/sharing/">Return to the homepage.</a>
+		<br>
+		{% else %}
+			<br>
+			<h1>Add an Item to Share</h1>
+			<form id="item_form" method="post" action="/sharing/add_item/"
+				enctype="multipart/form-data" >
+
+				{% csrf_token %}
+            	{{ item_form.as_p}}
+
+            	<!-- Provide a button to click to submit the form. -->
+            	<input type="submit" name="submit" value="Add Item"/>
+			</form>
+		{% endif %}
+		
+
+	</body>
+</html>
