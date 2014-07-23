@@ -13,9 +13,19 @@ class Member(models.Model):
 
 class Item(models.Model):
 	name = models.CharField(max_length=30)
-	category = models.CharField(max_length=30)
+	category_choices = (
+		('Tools', 'Tools & Gardening'),
+		('Home', 'Home & Appliances'), 
+		('Sports', 'Sports & Outdoors'),
+		('Electronics', 'Electronics'),
+		('Arts_etc', 'Arts & Crafts'),
+		('Movies_etc', 'Movies, Music, & Books'),
+		('Other', 'Other')
+	)
+	category = models.CharField(max_length=30, choices=category_choices)
 	description = models.TextField()
 	photo = models.ImageField(upload_to='profile_images', blank=True)
+	member = models.ManyToManyField(Member, related_name='item_owner')
 	# loaned = ????
 
 	def __unicode__(self):
@@ -30,7 +40,7 @@ class Group(models.Model):
 	description= models.CharField(max_length=30)
 	moderator= models.ForeignKey(Member)
 	member_list = models.ManyToManyField(Member, related_name='group_members')
-	items_list  = models.ManyToManyField(Item, related_name='group_items')
+	item_list  = models.ManyToManyField(Item, related_name='group_items')
 
 	def __unicode__(self):
 		return self.name

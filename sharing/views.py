@@ -1,20 +1,18 @@
 # ****** Sharing Views.py ***********
 from django.template import RequestContext
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from sharing.forms import MemberForm, MemberProfileForm, ItemForm
 from sharing.models import Member, Group, Item
+from django.contrib.auth import authenticate, login, logout
 
 
-# Create your views here.
 
 def index(request):
-	# context_dict = {}
 	return render(request, 'sharing/index.html')
 
 
 def about(request):
-    # context_dict = {'welcome': "Welcome to the About Page!"}
     return render(request, 'sharing/about.html')
 
 
@@ -49,6 +47,37 @@ def register(request):
 		
 	return render(request, 'sharing/register.html', {'member_form': member_form,
 				'profile_form': profile_form, 'registered': registered})
+
+
+def sign_in(request):
+	
+	if request.method == "POST":
+		username = request.POST['username']
+		password = request.POST['password']
+		print request.POST
+
+		member = authenticate(username = username, password = password)
+
+		if member:
+			if member.is_active:
+				login(request, member)
+				return HttpResponseRedirect('/sharing/')
+			else:
+                # An inactive account was used - no logging in!
+				return HttpResponse("Your sharing account is disabled.")
+		else:
+        # Bad login details were provided. So we can't log the user in.
+			print "Invalid login details: {0}, {1}".format(username, password)
+			return render(request, 'sharing/sign_in.html', {'invalid': "Invalid username or password"})
+	else:
+		return render(request, 'sharing/sign_in.html',)
+
+def sign_out(request):
+	logout(request)
+	return HttpResponseRedirect('/sharing/')
+
+
+
 
 def add_item(request):
 
