@@ -3,12 +3,12 @@ from django.contrib.auth.models import User
 
 
 class Member(models.Model):
-	member = models.OneToOneField(User)
+	user = models.OneToOneField(User)
 	profile_picture = models.ImageField(upload_to='profile_images', blank=True)
 	zip_code = models.CharField(max_length=5)
 
 	def __unicode__(self):
-		return self.member.username
+		return self.user.username
 
 
 class Item(models.Model):
@@ -24,8 +24,8 @@ class Item(models.Model):
 	)
 	category = models.CharField(max_length=30, choices=category_choices)
 	description = models.TextField()
-	photo = models.ImageField(upload_to='profile_images', blank=True)
-	member = models.ManyToManyField(Member, related_name='item_owner')
+	photo = models.ImageField(upload_to='item_images', blank=True)
+	member = models.ForeignKey(Member, related_name='item_owner',)
 	# loaned = ????
 
 	def __unicode__(self):
