@@ -25,7 +25,7 @@ class Item(models.Model):
 	category = models.CharField(max_length=30, choices=category_choices)
 	description = models.TextField()
 	photo = models.ImageField(upload_to='item_images', blank=True)
-	member = models.ForeignKey(Member, related_name='item_owner',)
+	member = models.ForeignKey(Member, related_name='item_owner')
 	# loaned = ????
 
 	def __unicode__(self):
@@ -37,15 +37,15 @@ class Item(models.Model):
 
 class Group(models.Model):
 	name = models.CharField(max_length=30)
-	description= models.CharField(max_length=30)
-	moderator= models.ForeignKey(Member)
+	description= models.TextField()
+	moderator= models.ForeignKey(Member, related_name="moderator")
 	member_list = models.ManyToManyField(Member, related_name='group_members')
 	item_list  = models.ManyToManyField(Item, related_name='group_items')
+	group_picture = models.ImageField(upload_to='group_images', blank=True)
+
 
 	def __unicode__(self):
 		return self.name
 
 	class Meta:
 		verbose_name_plural = "Groups"
-
-

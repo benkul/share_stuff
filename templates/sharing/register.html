@@ -16,13 +16,13 @@
 		{% else %}
 		<br>
 		<h1>Register with Share Stuff</h1>
-		<form id="member_form" method="post" action="/sharing/register/"
+		<form id="user_form" method="post" action="/sharing/register/"
 				enctype="multipart/form-data" >
 
 			{% csrf_token %}
 
-            {{ member_form.as_p }}	
-            {{ profile_form.as_p }}
+            {{ user_form.as_p }}	
+            {{ member_form.as_p }}
           
             <!-- Provide a button to click to submit the form. -->
             <input type="submit" name="submit" value="Register"/>

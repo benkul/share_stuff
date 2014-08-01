@@ -2,7 +2,7 @@ from django import forms
 from sharing.models import Member, Item, Group
 from django.contrib.auth.models import User
 
-class MemberForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
 	username = forms.CharField(widget=forms.TextInput(attrs=
 			{'placeholder': '3 or more characters, no spaces'}))
@@ -12,7 +12,7 @@ class MemberForm(forms.ModelForm):
 		fields = ('username', 'first_name', 'last_name', 'email', 'password')
 
 
-class MemberProfileForm(forms.ModelForm):
+class MemberForm(forms.ModelForm):
 	class Meta:
 		model = Member
 		fields = ('zip_code','profile_picture',)
@@ -23,4 +23,7 @@ class ItemForm(forms.ModelForm):
 		fields = ('name', 'category', 'description', 'photo')
 
 
-
+class GroupForm(forms.ModelForm):
+	class Meta:
+		model = Group
+		fields = ('name', 'description', 'group_picture')

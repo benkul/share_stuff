@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Your Inventory</title>
+	</head>
+	
+	<body>		
+		<h1>Your Inventory {{ user }}</h1>
+		{% if items %}
+			<ul>
+				{% for item in items %}
+				<li>{{ item.name }} <br>
+					owner: {{ item.member }} <br>
+					category: {{ item.category }} <br>
+					description: {{ item.description }} <br>
+					photo: {{ item.photo }}
+				</li>
+				{% endfor %}
+			</ul>	
+		{% else %}
+			<strong>You have no items.</strong>
+		{% endif %}
+		
+		<br>
+
+	</body>
+</html>

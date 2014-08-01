@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Share Stuff - Add Group</title>
+	</head>
+	
+	<body>
+		<br>
+		<a href="/sharing/">Home Page</a>
+		<br>
+		{% if group_added %}
+		<strong>Group added successfully. <br>
+		{% else %}
+			<br>
+			<h1>Create a Group</h1>
+			<form id="group_form" method="post" action="/sharing/add_group/"
+				enctype="multipart/form-data" >
+
+				{% csrf_token %}
+            	{{ group_form.as_p}}
+
+            	<!-- Provide a button to click to submit the form. -->
+            	<input type="submit" name="submit" value="Create Group"/>
+			</form>
+		{% endif %}
+		
+
+	</body>
+</html>

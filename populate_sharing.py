@@ -6,19 +6,27 @@ import os
 #   Item (member, name, category, description, photo)
 
 def populate():
-
+    # add member with one item
     user_1 = add_user('John1', 'John', 'Halifax', 'test1@gmail.com', 123)
     member_1 = add_member(user_1, 'profile_images/2014-03-21_15.03.25.jpg',
                 '97210')
     add_item(member_1, 'Volt Meter', 'Electronics', 'works OK', 
             'item_images/Drill.jpeg')
 
-
+    # add member with two items
     user_2 = add_user('Sean1', 'Sean', 'Johnson', 'test1@gmail.com', 123)
     member_2 = add_member(user_2, 'profile_images/2014-03-21_15.03.25.jpg',
                 '97210')
     add_item(member_2, 'Drill', 'Tools', 'works OK', 
             'item_images/Drill.jpeg')
+
+    add_item(member_2, 'Juicer', 'Kitchen', 'works OK', 
+            'item_images/Drill.jpeg')
+
+    # add member with no items
+    user_3 = add_user('Sally1', 'Sally', 'Smith', 'test1@gmail.com', 123)
+    member_3 = add_member(user_3, 'profile_images/2014-03-21_15.03.25.jpg',
+                '97210')
 
     for i in Item.objects.all():
         print "- {0}".format(str(i))
