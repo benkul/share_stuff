@@ -12,10 +12,10 @@
 			<ul>
 				{% for item in items %}
 				<li>{{ item.name }} <br>
-					owner: {{ item.member }} <br>
-					category: {{ item.category }} <br>
+					owner: {{ item.member.user }} <br>
+           	   <!-- category: {{ item.category }} <br>
 					description: {{ item.description }} <br>
-					photo: {{ item.photo }}
+					photo: {{ item.photo }} -->
 				</li>
 				{% endfor %}
 			</ul>	

@@ -8,7 +8,21 @@ class Member(models.Model):
 	zip_code = models.CharField(max_length=5)
 
 	def __unicode__(self):
-		return self.user.username
+		return "%s %s (%s)" %(self.user.first_name, self.user.last_name,
+			self.user.username)
+
+	class Meta:
+		verbose_name_plural = "Members"
+
+
+class Moderator(models.Model):
+	member = models.ForeignKey(Member, related_name = 'moderator')
+
+	def __unicode__(self):
+		return self.member.user.username
+
+	class Meta:
+		verbose_name_plural = "Moderators"
 
 
 class Item(models.Model):
@@ -38,9 +52,9 @@ class Item(models.Model):
 class Group(models.Model):
 	name = models.CharField(max_length=30)
 	description= models.TextField()
-	moderator= models.ForeignKey(Member, related_name="moderator")
-	member_list = models.ManyToManyField(Member, related_name='group_members')
-	item_list  = models.ManyToManyField(Item, related_name='group_items')
+	moderator= models.ForeignKey(Moderator, related_name="moderator")
+	member_list = models.ManyToManyField(Member, related_name='group_members', blank=True)
+	item_list  = models.ManyToManyField(Item, related_name='group_items', blank=True)
 	group_picture = models.ImageField(upload_to='group_images', blank=True)
 
 
@@ -49,3 +63,17 @@ class Group(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Groups"
+
+class JoinRequest(models.Model):
+	requestor = models.ForeignKey(Member, related_name = 'requestor')
+	group = models.ForeignKey(Group)
+	request_date = models.DateTimeField()
+	accept = models.BooleanField()
+	reject = models.BooleanField()
+	action_date = models.DateTimeField(null=True, blank=True)
+
+	def __unicode__(self):
+		return "Member: %s --- Moderator: %s" %(self.requestor.user, self.group.moderator)
+
+	class Meta:
+		verbose_name_plural = "Join request"

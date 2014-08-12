@@ -1,0 +1,23 @@
+{% extends 'sharing/base.html' %}
+{% block title %} Member Page {% endblock %}
+
+{% block body_block %}
+    <h1> Inventory for {{ user }} </h1>
+        {% if items %}
+            <ul>
+                {% for item in items %}
+                <li>{{ item.name }}
+                </li>
+                {% endfor %}
+            </ul>   
+        {% else %}
+            <strong>You have no items.</strong> <br>
+        {% endif %}
+
+        {% if moderator %}
+        <a href="/sharing/join_requests/"> View Requests to Join Group </a>
+        {% endif %}
+
+{% endblock %}
+
+

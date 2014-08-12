@@ -1,5 +1,8 @@
 # Script to run syncdb, loaddata, and populate_sharing.py
 
+# delete database
+rm sharing.db
+
 # run syncdb command without input prompts
 python manage.py syncdb --noinput
 

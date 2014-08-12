@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Share Stuff -  {% block title %}Share Stuff!{% endblock %} </title>
+    </head>
+
+    <body>
+        <div>
+            {% block body_block %} {% endblock %}
+        </div>
+
+        <hr>
+
+        <div>
+            <ul>
+            {% if user.is_authenticated %}
+                <li><a href="/sharing/add_item/">Add an Item</a></li>
+                <li><a href="/sharing/sign_out/">Sign Out</a></li>
+
+            {% else %}
+                <li><a href="/sharing/register/">Register Here</a></li>
+                <li><a href="/sharing/sign_in/">Sign In</a></li>
+            {% endif %}
+                <li><a href="/sharing/about/">About</a></li>
+                <li><a href="/sharing/">Home</a></li>
+            </ul>
+        </div>  
+    </body>
+

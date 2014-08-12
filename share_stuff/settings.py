@@ -90,3 +90,4 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
+LOGIN_URL = '/sharing/sign_in/'

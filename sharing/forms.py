@@ -1,5 +1,5 @@
 from django import forms
-from sharing.models import Member, Item, Group
+from sharing.models import Member, Item, Group, JoinRequest
 from django.contrib.auth.models import User
 
 class UserForm(forms.ModelForm):
@@ -27,3 +27,9 @@ class GroupForm(forms.ModelForm):
 	class Meta:
 		model = Group
 		fields = ('name', 'description', 'group_picture')
+
+class AcceptRequestForm(forms.ModelForm):
+	class Meta:
+		model = JoinRequest
+		fields = ('accept', 'reject')
+
