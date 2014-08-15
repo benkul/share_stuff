@@ -1,6 +1,6 @@
 # ****** Sharing Views.py ***********
 from django.template import RequestContext
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from sharing.forms import UserForm, MemberForm, ItemForm, GroupForm, AcceptRequestForm
 from sharing.models import Member, Group, Item, Moderator, JoinRequest
@@ -81,7 +81,8 @@ def sign_out(request):
 @login_required
 def add_item(request):
 
-	item_added = False
+	# item_added = False
+	context_dict = {}
 
 	if request.method == "POST":
 		item_form = ItemForm(data=request.POST)
@@ -90,22 +91,23 @@ def add_item(request):
 			# (commit=False) doesn't save data to database
 			item = item_form.save(commit=False)
 			item.member = request.user.member
-			item_name = item.name
+			# use item_name as boolean in template.
+			context_dict['item_name'] = item.name
 
 			if 'photo' in request.FILES:
 				item.photo = request.FILES['photo']
 
 			item.save() # saves form data to database.
-			item_added = True
 
 		else:
 			print item_form.errors
 
 	else:
 		item_form = ItemForm()
+
+	context_dict['item_form'] = item_form
 		
-	return render(request, 'sharing/add_item.html', {'item_form': item_form,
-				'item_added': item_added, 'item_name': item_name})
+	return render(request, 'sharing/add_item.html', context_dict)
 
 @login_required
 def add_group(request):
@@ -146,14 +148,27 @@ def inventory(request):
 
 @login_required
 def member(request):
-	# list of a members items
+	group_items = []
+	# list of a member's items
 	item_list = Item.objects.filter(member__user=request.user)
 	# is the member a moderator?
 	moderator = Moderator.objects.filter(member__user=request.user)
 	# list of join requests for a moderator
 	join_requests = JoinRequest.objects.filter(group__moderator=request.user)
+	# all groups that a member belongs too
+	groups = Group.objects.filter(member_list__user=request.user)
+	# list of items for the group.
+	for group in groups:
+		# get members of this group
+		group_members = group.member_list.all()
+		# list of items for each member.
+		for member in group_members:
+			# get items for this member.
+			group_items.extend(Item.objects.filter(member=member))
 
-	context_dict = {'items': item_list, 'moderator': moderator, 'requests': join_requests}
+
+	context_dict = {'items': item_list, 'moderator': moderator, 'requests': join_requests,
+			'groups': groups, 'group_members': group_members, 'group_items': group_items}
 	return render(request, 'sharing/member.html', context_dict)
 
 @login_required
@@ -162,26 +177,15 @@ def join_requests(request):
 	requests_pending = []
 	requests_completed = []
 
+	# Determine which join requests are pending or completed.
 	for req in join_request_list:
-		if not req.action_date:
+		if not req.action_date: # indicates moderator hasn't accepted or rejected join request
 			requests_pending.append(req)
 		else: 
 			requests_completed.append(req)
 
-	if request.method == "POST":
-		print request.POST
-		accept_request_form = AcceptRequestForm(data=request.POST)
-
-		if accept_request_form.is_valid():
-			join_request = accept_request_form.save(commit = False)
-			join_request.action_date =  datetime.now()
-			join_request.save()
-
-		else:
-			print accept_request_form.errors
-	
-	else:
-		accept_request_form = AcceptRequestForm()
+	# Process form with def process(request, request_id).		
+	accept_request_form = AcceptRequestForm()
 
 	context_dict = {'join_request_list': join_request_list,
 			'accept_request_form': accept_request_form, 'requests_pending': requests_pending,
@@ -193,16 +197,22 @@ def process(request, request_id):
 
 	if request.method == "POST":
 		# confirm request exists
-		# TODO: Add try except statement around object get
-		# TODO: -or- use get_or_404 function
-		join_request = get_object_or_404(JoinRequest, group__moderator__member__user=request.user,
-					id=request_id)
+		join_request = get_object_or_404(JoinRequest,
+				group__moderator__member__user=request.user, id=request_id)
 		print request.POST
 		accept_request_form = AcceptRequestForm(data=request.POST)
 
 		if accept_request_form.is_valid():
-			# TODO: Check that ONLY accept or reject selected.
 			form = accept_request_form.save(commit = False)
+
+			# Check for valid choices.
+			if (form.accept and form.reject) or (not form.accept and not form.reject):
+
+				# return HttpResponseRedirect('/sharing/join_requests/')
+				error = "Invalid: select either accept or reject"
+				return render(request, 'sharing/join_requests.html',
+						{'error': error})
+
 			join_request.action_date =  datetime.now()
 			join_request.accept = form.accept
 			join_request.reject = form.reject
@@ -215,4 +225,11 @@ def process(request, request_id):
 		print "process: GET request ignored"
 
 	return HttpResponseRedirect('/sharing/join_requests/')
-    # return render(request, 'sharing/join_requests.html')
+
+@login_required
+def delete_item (request, item_id): # Process to delete an item.
+
+	item = get_object_or_404(Item, member__user=request.user, id=item_id)
+	print item.name
+	item.delete()
+	return HttpResponse(item.name)

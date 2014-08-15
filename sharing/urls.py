@@ -15,8 +15,8 @@ urlpatterns = patterns('',
         url(r'^(?i)member/$', views.member, name='member'),
         url(r'^(?i)join_requests/$', views.join_requests, name='join_requests'),
         url(r'^(?i)join_requests/process/(?P<request_id>\w+)/$', 
-                views.process, name='process')        
+                views.process, name='process'),
+        url(r'^(?i)inventory/delete_item/(?P<item_id>\w+)/$', 
+                views.delete_item, name='delete_item'),        
 )
 
-
-# /sharing/join_requests/process/{{request.id}}/

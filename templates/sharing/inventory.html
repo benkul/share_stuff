@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-
-<html>
-
-	<head>
-		<title>Your Inventory</title>
-	</head>
+{% extends 'sharing/base.html' %}
+{% block title %} Your Inventory {% endblock %}
 	
-	<body>		
+{% block body_block %}
 		<h1>Your Inventory {{ user }}</h1>
 		{% if items %}
 			<ul>
 				{% for item in items %}
-				<li>{{ item.name }} <br>
-					owner: {{ item.member.user }} <br>
-           	   <!-- category: {{ item.category }} <br>
-					description: {{ item.description }} <br>
-					photo: {{ item.photo }} -->
-				</li>
+            <li>{{ item.name }} 
+                <input type='button' onClick='parent.location= "/sharing/inventory/delete_item/{{ item.id }}/"' 
+                	value="Delete"> <br><br>
+            </li>
+
 				{% endfor %}
 			</ul>	
 		{% else %}
@@ -25,5 +19,6 @@
 		
 		<br>
 
-	</body>
-</html>
+{% endblock%}
+
+<button type="button">Click Me!</button> 

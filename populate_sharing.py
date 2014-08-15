@@ -28,10 +28,46 @@ def populate():
     member_3 = add_member(user_3, 'profile_images/2014-03-21_15.03.25.jpg',
                 '97210')
 
+    # add member with one item
+    user_4 = add_user('Bruno1', 'Bruno', 'Sanchez', 'test1@gmail.com', 123)
+    member_4 = add_member(user_4, 'profile_images/2014-03-21_15.03.25.jpg',
+                '97210')
+    add_item(member_4, 'Stereo', 'Electronics', 'works OK', 
+            'item_images/Drill.jpeg')
+
+    # add member with one item
+    user_5 = add_user('Elle1', 'Elle', 'Brown', 'test1@gmail.com', 123)
+    member_5 = add_member(user_5, 'profile_images/2014-03-21_15.03.25.jpg',
+                '97210')
+    add_item(member_5, 'Cuisinart', 'Kitchen', 'works OK', 
+            'item_images/Drill.jpeg')
+
+    # add member with one item
+    user_6 = add_user('Zeus1', 'Zeus', 'Martinez', 'test1@gmail.com', 123)
+    member_6 = add_member(user_6, 'profile_images/2014-03-21_15.03.25.jpg',
+                '97210')
+    add_item(member_6, '2 person backpacking tent', 'Sports', 'Bomber!', 
+            'item_images/Drill.jpeg')
+
+    # add member with one item
+    user_7 = add_user('Aphrodite1', 'Aphrodite', 'Odell', 'test1@gmail.com', 123)
+    member_7 = add_member(user_7, 'profile_images/2014-03-21_15.03.25.jpg',
+                '97210')
+    add_item(member_7, 'Harp', 'Other', 'Needs tuning', 
+            'item_images/Drill.jpeg')
+
     # add group 
-    # member_list_1 = [member_1, member_2]
     moderator_1 = add_moderator(member_1)
     group_1 = add_group(moderator_1, 'Group 1', "The Best Group Ever")
+
+    # add group 
+    moderator_2 = add_moderator(member_2)
+    group_2 = add_group(moderator_2, 'Group 2', "No we're the Best Group Ever")
+
+    # add group 
+    moderator_3 = add_moderator(member_3)
+    group_3 = add_group(moderator_3, 'Group 3', "We're just an average Group.")
+
 
     for i in Item.objects.all():
         print "- {0}".format(str(i))
