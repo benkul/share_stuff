@@ -7,7 +7,9 @@
 			<ul>
 				{% for item in items %}
             <li>{{ item.name }}: {{ item.description }}<br>
+                {% if item.photo %}
                 <img src="/media/{{ item.photo }}"/>
+                {% endif %}
 
                 <input type='button' onClick='parent.location= "/sharing/inventory/delete_item/{{ item.id }}/"' 
                 	value="Delete"> <br><br>
