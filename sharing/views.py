@@ -120,7 +120,12 @@ def add_group(request):
         if group_form.is_valid():
             # (commit= False) doesn't save data to database
             group = group_form.save(commit=False)
-            group.moderator = request.user.member
+
+            #objects.get()
+            moderator = Moderator(member=request.user.member)
+            moderator.save()
+
+            group.moderator = moderator
 
             if 'group_picture' in request.FILES:
                 group.photo = request.FILES['group_picture']

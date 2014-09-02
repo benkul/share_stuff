@@ -25,6 +25,8 @@ class Moderator(models.Model):
 		verbose_name_plural = "Moderators"
 
 
+
+
 class Item(models.Model):
 	name = models.CharField(max_length=30)
 	category_choices = (
